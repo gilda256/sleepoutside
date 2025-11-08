@@ -256,6 +256,22 @@ button {
     grid-template-columns: 150px auto 15%;
   }
 }
+.cart-count {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: red;
+  color: white;
+  font-size: 0.8rem;
+  font-weight: bold;
+  border-radius: 50%;
+  padding: 0.2rem 0.5rem;
+  line-height: 1;
+}
+.cart {
+  position: relative; 
+}
+
 
 footer {
   font-size: var(--small-font);
