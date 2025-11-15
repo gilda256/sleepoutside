@@ -1,0 +1,1 @@
+import{g as a}from"./utils-BnEWW26x.js";function o(){const e=a("so-cart")||[];let t=document.querySelector(".cart-count");if(!t){const c=document.querySelector(".cart a");t=document.createElement("span"),t.classList.add("cart-count"),c.appendChild(t)}t.textContent=e.length}o();export{o as u};
