@@ -2,6 +2,7 @@ import { getLocalStorage, setLocalStorage } from "./utils.mjs";
 import ProductData from "./ProductData.mjs";
 import { getParam } from "./utils.mjs";
 import {loadHeaderFooter} from "./utils.mjs";
+import { updateCartCount } from "./utils.mjs";
 
 loadHeaderFooter();
 
@@ -28,6 +29,7 @@ export default class ProductDetails {
     const cartItems = getLocalStorage("so-cart") || [];
     cartItems.push(this.product);
     setLocalStorage("so-cart", cartItems);
+     updateCartCount();
   }
 
   renderProductDetails() {
@@ -39,21 +41,42 @@ function productDetailsTemplate(product) {
   document.querySelector("h2").textContent = product.Brand.Name;
   document.querySelector("h3").textContent = product.NameWithoutBrand;
 
+  
   const productImage = document.getElementById("productImage");
   productImage.src = product.Images.PrimaryLarge;
   productImage.alt = product.Name;
 
-  document.getElementById("productPrice").textContent = product.FinalPrice;
+   // Discount 
+  const isDiscounted = product.FinalPrice < product.SuggestedRetailPrice;
+  const discountPercent = isDiscounted
+    ? Math.round(
+        ((product.SuggestedRetailPrice - product.FinalPrice) / product.SuggestedRetailPrice) * 100
+      )
+    : 0;
+
+  const productPriceElement = document.getElementById("productPrice");
+
+  if (isDiscounted) {
+    productPriceElement.innerHTML = `
+      <span class="original-price">Original price: $${product.SuggestedRetailPrice.toFixed(2)}</span><br>
+      <strong>$${product.FinalPrice.toFixed(2)}</strong>
+      <span class="product-card__discount">-${discountPercent}% OFF</span>
+    `;
+  } else {
+    productPriceElement.textContent = `$${product.FinalPrice.toFixed(2)}`;
+  }
+
   document.getElementById("productColor").textContent =
     product.Colors[0].ColorName;
+
   document.getElementById("productDesc").innerHTML =
     product.DescriptionHtmlSimple;
 
   document.getElementById("addToCart").dataset.id = product.Id;
 }
-
+  
 const productId = getParam("product"); 
-const dataSource = new ProductData();
+const dataSource = new ProductData("tents");
 const product = new ProductDetails(productId, dataSource);
 product.init();
 

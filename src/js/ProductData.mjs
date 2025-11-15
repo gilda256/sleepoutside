@@ -9,11 +9,15 @@ function convertToJson(res) {
 }
 
 export default class ProductData {
-   
-
+  constructor() {
+    // this.category = category;
+    // this.path = `../public/json/${this.category}.json`;
+  }
   async getData(category) {
     const response = await fetch(`${baseURL}products/search/${category}`);
+    console.log(`${baseURL}products/search/${category}`);
     const data = await convertToJson(response);
+    
     return data.Result;
   }
 
