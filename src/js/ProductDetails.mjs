@@ -1,11 +1,7 @@
 import { getLocalStorage, setLocalStorage } from "./utils.mjs";
-import ProductData from "./ProductData.mjs";
-import { getParam } from "./utils.mjs";
-import {loadHeaderFooter} from "./utils.mjs";
-
-loadHeaderFooter();
 
 export default class ProductDetails {
+
   constructor(productId, dataSource) {
     this.productId = productId;
     this.product = {};
@@ -18,9 +14,9 @@ export default class ProductDetails {
     // the product details are needed before rendering the HTML
     this.renderProductDetails();
     // once the HTML is rendered, add a listener to the Add to Cart button
-    // Notice the .bind(this). This callback will not work if the bind(this) is missing. Review the readings from this week on 'this' to understand why.
+    // Notice the .bind(this). This callback will not work if the bind(this) is missing. Review the readings from this week on "this" to understand why.
     document
-      .getElementById("addToCart")
+      .getElementById("add-to-cart")
       .addEventListener("click", this.addProductToCart.bind(this));
   }
 
@@ -36,26 +32,23 @@ export default class ProductDetails {
 }
 
 function productDetailsTemplate(product) {
-  document.querySelector("h2").textContent = product.Brand.Name;
-  document.querySelector("h3").textContent = product.NameWithoutBrand;
+  document.querySelector("h2").textContent = product.Category.charAt(0).toUpperCase() + product.Category.slice(1);
+  document.querySelector("#p-brand").textContent = product.Brand.Name;
+  document.querySelector("#p-name").textContent = product.NameWithoutBrand;
 
-  const productImage = document.getElementById("productImage");
-  productImage.src = product.Images.PrimaryLarge;
-  productImage.alt = product.Name;
+  const productImage = document.querySelector("#p-image");
+  productImage.src = product.Images.PrimaryExtraLarge;
+  productImage.alt = product.NameWithoutBrand;
+  const euroPrice = new Intl.NumberFormat('de-DE',
+    {
+      style: 'currency', currency: 'EUR',
+    }).format(Number(product.FinalPrice) * 0.85);
+  document.querySelector("#p-price").textContent = `${euroPrice}`;
+  document.querySelector("#p-color").textContent = product.Colors[0].ColorName;
+  document.querySelector("#p-description").innerHTML = product.DescriptionHtmlSimple;
 
-  document.getElementById("productPrice").textContent = product.FinalPrice;
-  document.getElementById("productColor").textContent =
-    product.Colors[0].ColorName;
-  document.getElementById("productDesc").innerHTML =
-    product.DescriptionHtmlSimple;
-
-  document.getElementById("addToCart").dataset.id = product.Id;
+  document.querySelector("#add-to-cart").dataset.id = product.Id;
 }
-
-const productId = getParam("product"); 
-const dataSource = new ProductData();
-const product = new ProductDetails(productId, dataSource);
-product.init();
 
 // ************* Alternative Display Product Details Method *******************
 // function productDetailsTemplate(product) {
