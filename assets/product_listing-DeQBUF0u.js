@@ -1,1 +1,0 @@
-import{l as o,a as e,u as a}from"./utils-BNP7OC3i.js";import{P as r}from"./ProductData-DIWhLEfz.js";import{P as n}from"./ProductList-DHgJzGEZ.js";const c=document.getElementById("products-category");o();const t=e("category");c.textContent=t;const d=new r,s=document.querySelector(".product-list"),u=new n(t,d,s);u.init();document.addEventListener("DOMContentLoaded",()=>{a()});
