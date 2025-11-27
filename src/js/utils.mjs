@@ -1,4 +1,17 @@
+let headerFooterLoaded = false; 
+export async function loadHeaderFooter() {
+  if (headerFooterLoaded) return;  
+  headerFooterLoaded = true;
 
+  const headerTemplate = await loadTemplate("src/public/partials/header.html");
+  const footerTemplate = await loadTemplate("src/public/partials/footer.html");
+
+  const headerElement = document.querySelector("#main-header");
+  const footerElement = document.querySelector("#main-footer");
+
+  renderWithTemplate(headerTemplate, headerElement);
+  renderWithTemplate(footerTemplate, footerElement);
+}
 // wrapper for querySelector...returns matching element
 export function qs(selector, parent = document) {
   return parent.querySelector(selector);
